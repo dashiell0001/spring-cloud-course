@@ -1,0 +1,114 @@
+{
+  "info": {
+    "name": "Flight Search Service",
+    "description": "Postman collection for Flight Search microservice demo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator",
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Flights (default MEX \u2192 LAX)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/flights/search?origin=MEX&destination=LAX&dateFrom=2025-12-20&dateTo=2025-12-28",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "flights",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "origin",
+              "value": "MEX"
+            },
+            {
+              "key": "destination",
+              "value": "LAX"
+            },
+            {
+              "key": "dateFrom",
+              "value": "2025-12-20"
+            },
+            {
+              "key": "dateTo",
+              "value": "2025-12-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Flights (MEX \u2192 JFK)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/flights/search?origin=MEX&destination=JFK&dateFrom=2025-12-21&dateTo=2025-12-24",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "flights",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "origin",
+              "value": "MEX"
+            },
+            {
+              "key": "destination",
+              "value": "JFK"
+            },
+            {
+              "key": "dateFrom",
+              "value": "2025-12-21"
+            },
+            {
+              "key": "dateTo",
+              "value": "2025-12-24"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

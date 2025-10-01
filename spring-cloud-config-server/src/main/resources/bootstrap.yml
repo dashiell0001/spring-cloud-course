@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: native
+---
+spring:
+  config:
+    activate:
+      on-profile: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
