@@ -43,11 +43,11 @@ It also shows how to expose routes for **Flight Search**, **Pricing**, and **Boo
    ```
 
 3. Run the gateway:
-   ```bash
+   ```
    mvn spring-boot:run
    ```
    or
-   ```bash
+   ```
    java -jar target/api-gateway-0.0.1-SNAPSHOT.jar
    ```
 
