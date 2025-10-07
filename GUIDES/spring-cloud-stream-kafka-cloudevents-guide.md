@@ -77,17 +77,22 @@ public record BookingCreatedEvent(
         <dependency>
             <groupId>io.cloudevents</groupId>
             <artifactId>cloudevents-core</artifactId>
-            <version>2.5.0</version>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cloudevents</groupId>
+            <artifactId>cloudevents-spring-messaging</artifactId>
+            <version>4.0.1</version> 
         </dependency>
         <dependency>
             <groupId>io.cloudevents</groupId>
             <artifactId>cloudevents-spring</artifactId>
-            <version>2.5.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.cloudevents</groupId>
             <artifactId>cloudevents-json-jackson</artifactId>
-            <version>2.5.0</version>
+            <version>4.0.1</version>
         </dependency>
     </dependencies>
 </dependencies>
