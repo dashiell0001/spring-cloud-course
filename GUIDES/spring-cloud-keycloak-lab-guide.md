@@ -224,6 +224,7 @@ spring:
 
 ```java
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
   @Bean
