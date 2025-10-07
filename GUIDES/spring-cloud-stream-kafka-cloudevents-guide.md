@@ -81,11 +81,6 @@ public record BookingCreatedEvent(
         </dependency>
         <dependency>
             <groupId>io.cloudevents</groupId>
-            <artifactId>cloudevents-spring-messaging</artifactId>
-            <version>4.0.1</version> 
-        </dependency>
-        <dependency>
-            <groupId>io.cloudevents</groupId>
             <artifactId>cloudevents-spring</artifactId>
             <version>4.0.1</version>
         </dependency>
