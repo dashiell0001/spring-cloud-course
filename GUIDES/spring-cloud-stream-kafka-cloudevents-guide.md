@@ -133,6 +133,7 @@ import io.cloudevents.spring.messaging.CloudEventMessageBuilder;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -141,28 +142,38 @@ import java.util.UUID;
 public class BookingEventPublisher {
 
     private final StreamBridge streamBridge;
+    private final ObjectMapper objectMapper;
 
-    public BookingEventPublisher(StreamBridge streamBridge) {
+    public BookingEventPublisher(StreamBridge streamBridge, ObjectMapper objectMapper) {
         this.streamBridge = streamBridge;
+        this.objectMapper = objectMapper;
     }
 
     public void publish(BookingCreatedEvent booking, String bearerJwt) {
-        CloudEvent event = CloudEventBuilder.v1()
-                .withId(UUID.randomUUID().toString())
-                .withType("com.example.booking.created")
-                .withSource(URI.create("urn:booking-service"))
-                .withTime(OffsetDateTime.now())
-                .withData("application/json", booking)
-                .build();
 
-        Message<?> message = new CloudEventMessageBuilder<>(event)
-                .setHeader("ce-authorization", bearerJwt)
-                .build();
+        try {
+            byte[] dataBytes = objectMapper.writeValueAsBytes(booking);
 
-        boolean sent = streamBridge.send("bookingEvents-out-0", message);
+            CloudEvent event = CloudEventBuilder.v1()
+                    .withId(UUID.randomUUID().toString())
+                    .withType("com.example.booking.created")
+                    .withSource(URI.create("urn:booking-service"))
+                    .withTime(OffsetDateTime.now())
+                    .withData("application/json", dataBytes)
+                    .build();
 
-        if (!sent) {
-            throw new IllegalStateException("Failed to publish CloudEvent for booking " + booking.bookingId());
+            Message<?> message = new CloudEventMessageBuilder<>(event)
+                    .setHeader("ce-authorization", bearerJwt)
+                    .build();
+
+            boolean sent = streamBridge.send("bookingEvents-out-0", message);
+
+            if (!sent) {
+                throw new IllegalStateException("Failed to publish CloudEvent for booking " + booking.bookingId());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error serializing booking event data", e);
         }
     }
 }
