@@ -127,55 +127,42 @@ spring:
 
 ### 3.3 Publisher using `StreamBridge` (adds CloudEvent headers)
 ```java
-import com.example.events.BookingCreatedEvent;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
-import io.cloudevents.spring.messaging.CloudEventMessageUtils;
+import io.cloudevents.spring.messaging.CloudEventMessageBuilder;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
 public class BookingEventPublisher {
-    
+
     private final StreamBridge streamBridge;
-    
+
     public BookingEventPublisher(StreamBridge streamBridge) {
         this.streamBridge = streamBridge;
     }
-    
+
     public void publish(BookingCreatedEvent booking, String bearerJwt) {
         CloudEvent event = CloudEventBuilder.v1()
                 .withId(UUID.randomUUID().toString())
                 .withType("com.example.booking.created")
                 .withSource(URI.create("urn:booking-service"))
                 .withTime(OffsetDateTime.now())
-                .withData("application/json",
-                        toJson(booking).getBytes(StandardCharsets.UTF_8))
+                .withData("application/json", booking)
                 .build();
-        
-        Message<CloudEvent> message = MessageBuilder.withPayload(event)
-                .copyHeaders(CloudEventMessageUtils.toMap(event))
+
+        Message<?> message = new CloudEventMessageBuilder<>(event)
                 .setHeader("ce-authorization", bearerJwt)
                 .build();
-        
+
         boolean sent = streamBridge.send("bookingEvents-out-0", message);
+
         if (!sent) {
             throw new IllegalStateException("Failed to publish CloudEvent for booking " + booking.bookingId());
-        }
-    }
-    
-    private String toJson(Object obj) {
-        try {
-            return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
