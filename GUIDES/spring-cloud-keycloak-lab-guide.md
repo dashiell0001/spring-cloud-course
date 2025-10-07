@@ -242,7 +242,7 @@ public class SecurityConfig {
 ```
 ---
 
-## 4Testing with Keycloak Token
+## Testing with Keycloak Token
 
 ### Obtain JWT token
 
