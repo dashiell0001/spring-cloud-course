@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: pricing-service
+  profiles:
+    active: default
+  config:
+    import: "optional:configserver:http://localhost:8090"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,prometheus
+
